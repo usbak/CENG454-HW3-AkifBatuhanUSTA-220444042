@@ -25,18 +25,29 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("Update CALISIYOR");
+        if (Input.anyKey)
+        {
+            Debug.Log("Bir tusa basildi!");
+        }
         HandleMovement();
         HandleFire();
     }
 
     private void HandleMovement()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        Vector2 input = new Vector2(x, y).normalized;
-        rb.linearVelocity = input * moveSpeed;
-    }
+        float x = 0f;
+        float y = 0f;
 
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))  x = -1f;
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) x = 1f;
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))  y = -1f;
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))    y = 1f;
+
+        Vector2 input = new Vector2(x, y).normalized;
+        rb.linearVelocity = new Vector2(x, y).normalized * 5f;
+        Debug.Log($"KeyInput: X={x} Y={y}");
+    }
     private void HandleFire()
     {
         if (!Input.GetMouseButton(0)) return;

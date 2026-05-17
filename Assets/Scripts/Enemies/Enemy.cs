@@ -4,14 +4,12 @@ public enum EnemyMovementType { Straight, ZigZag }
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-    [Header("Stats")]
-    [SerializeField] private int maxHealth = 2;
-    [SerializeField] private int damageToCore = 10;
+    [Header("Stats")] [SerializeField] private int maxHealth = 2;
+    [SerializeField] private int damage = 1;
     [SerializeField] private float speed = 2f;
     [SerializeField] private int scoreValue = 10;
 
-    [Header("Strategy")]
-    [SerializeField] private EnemyMovementType movementType = EnemyMovementType.Straight;
+    [Header("Strategy")] [SerializeField] private EnemyMovementType movementType = EnemyMovementType.Straight;
 
     private IMovementStrategy movementStrategy;
     private Transform target;
@@ -26,7 +24,7 @@ public class Enemy : MonoBehaviour, IDamageable
         movementStrategy = CreateStrategy(movementType);
     }
 
-    
+
     public void Initialize(Transform coreTransform, EnemyMovementType type)
     {
         target = coreTransform;
@@ -37,7 +35,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private IMovementStrategy CreateStrategy(EnemyMovementType type)
     {
-        
+
         return type switch
         {
             EnemyMovementType.ZigZag => new ZigZagMovement(),
@@ -62,16 +60,24 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         GameEvents.RaiseEnemyDied(transform.position);
         GameEvents.RaiseScoreChanged(scoreValue);
-        Destroy(gameObject);  
+        Destroy(gameObject);
     }
 
-    // Core ile çarpışma
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent<EnergyCore>(out var core))
+       
+        if (other.GetComponent<Bullet>() != null) return;
+
+        
+        if (other.TryGetComponent<IDamageable>(out var target) && target.IsAlive)
         {
-            core.TakeDamage(damageToCore);
-            Destroy(gameObject);
+            target.TakeDamage(damage);
+
+            
+            Die();
         }
     }
+
+    
 }
