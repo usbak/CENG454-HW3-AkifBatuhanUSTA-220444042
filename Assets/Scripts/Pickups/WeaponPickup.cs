@@ -8,6 +8,8 @@ public class WeaponPickup : MonoBehaviour
     {
         if (other.TryGetComponent<PlayerController>(out var pc))
         {
+            
+            Debug.Log($"Pickup alındı: {upgradeType} upgrade uygulanıyor");
             pc.UpgradeWeapon(upgradeType);
             Destroy(gameObject);
         }

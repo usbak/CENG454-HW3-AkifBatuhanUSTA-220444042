@@ -25,11 +25,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Update CALISIYOR");
-        if (Input.anyKey)
-        {
-            Debug.Log("Bir tusa basildi!");
-        }
+        
+      
         HandleMovement();
         HandleFire();
     }
@@ -46,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 input = new Vector2(x, y).normalized;
         rb.linearVelocity = new Vector2(x, y).normalized * 5f;
-        Debug.Log($"KeyInput: X={x} Y={y}");
+        
     }
     private void HandleFire()
     {
