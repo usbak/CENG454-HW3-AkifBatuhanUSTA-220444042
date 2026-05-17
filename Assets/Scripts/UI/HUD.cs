@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class HUD : MonoBehaviour
 {
-    [SerializeField] private Slider coreHealthBar;
-    [SerializeField] private Slider playerHealthBar;
+    [SerializeField] private TextMeshProUGUI coreHealthText;
+    [SerializeField] private TextMeshProUGUI playerHealthText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI waveText;
 
@@ -28,12 +27,12 @@ public class HUD : MonoBehaviour
 
     private void HandleCoreDamaged(int hp, int max)
     {
-        coreHealthBar.value = (float)hp / max;
+        coreHealthText.text = $"CORE: {hp} / {max}";
     }
 
     private void HandlePlayerHealth(int hp, int max)
     {
-        playerHealthBar.value = (float)hp / max;
+        playerHealthText.text = $"HP: {hp} / {max}";
     }
 
     private void HandleScore(int score)

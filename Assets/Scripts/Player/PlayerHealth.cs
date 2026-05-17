@@ -11,13 +11,24 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         CurrentHealth = maxHealth;
+    }
+
+    private void Start()
+    {
         GameEvents.RaisePlayerHealthChanged(CurrentHealth, MaxHealth);
     }
 
     public void TakeDamage(int damage)
     {
-        if (!IsAlive) return;
+        if (!IsAlive || damage <= 0) return;
+
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         GameEvents.RaisePlayerHealthChanged(CurrentHealth, MaxHealth);
+
+        if (!IsAlive)
+        {
+            
+            GameEvents.RaiseCoreDestroyed();
+        }
     }
 }

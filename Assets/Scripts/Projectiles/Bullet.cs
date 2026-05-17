@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour, IPoolable
     [SerializeField] private float speed = 15f;
     [SerializeField] private float lifeTime = 2f;
     [SerializeField] private int damage = 1;
-    [SerializeField] private bool piercing = false; 
+    [SerializeField] private bool piercing = false;
 
     private Rigidbody2D rb;
     private float spawnTime;
@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour, IPoolable
     public void OnSpawn()
     {
         spawnTime = Time.time;
-        rb.linearVelocity = Vector2.zero;  // state reset
+        rb.linearVelocity = Vector2.zero; // state reset
     }
 
     public void OnDespawn()
@@ -37,19 +37,17 @@ public class Bullet : MonoBehaviour, IPoolable
 
     private void Update()
     {
-        
+
         if (Time.time - spawnTime > lifeTime)
             PoolManager.Instance.BulletPool.Return(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Player")) return;
         if (other.TryGetComponent<IDamageable>(out var target) && target.IsAlive)
         {
             target.TakeDamage(Damage);
-
-            
-            PoolManager.Instance.HitEffectPool.Get(transform.position, Quaternion.identity);
 
             if (!Piercing)
                 PoolManager.Instance.BulletPool.Return(this);
